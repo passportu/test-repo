@@ -1,5 +1,5 @@
 import ldap
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import TextField, PasswordField
 from wtforms.validators import InputRequired
 from my_app import db, app
@@ -20,11 +20,15 @@ class User(db.Model):
     @staticmethod
     def try_login(username, password):
         conn = get_ldap_connection()
-        conn.simple_bind_s(
-            'cn=%s,ou=Users,dc=testathon,dc=net' % username,
-            password
-        )
+        # conn.simple_bind_s(
+        #     'cn=%s,ou=Users,dc=example,dc=com' % username,
+        #     password
+        # )
+        c_username = "cn=tesla, o=example.com"
+        c_password  = "password"
+        conn.simple_bind_s("cn=tesla,dc=example,dc=com", u'password')
  
+
     def is_authenticated(self):
         return True
  
@@ -38,6 +42,6 @@ class User(db.Model):
         return unicode(self.id)
  
  
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     username = TextField('Username', [InputRequired()])
     password = PasswordField('Password', [InputRequired()])
